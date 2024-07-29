@@ -17,8 +17,12 @@ self.onmessage = async function(event) {
             method: 'POST',
             body: formData,
         });
-
         const result = await response.json();
+
+        if(!response.ok) {self.postMessage({ success: false, result })
+        return
+        }
+        
         self.postMessage({ success: true, result });
     } catch (error) {
         self.postMessage({ success: false, error });
