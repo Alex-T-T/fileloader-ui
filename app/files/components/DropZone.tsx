@@ -47,17 +47,17 @@ export const Dropzone: React.FC<DropzoneProps> = ({ onFileSelect }) => {
 
         <input {...getInputProps()} />
         <p className='text-center text-white mb-3'>Drag & drop or select file from your computer</p>
-        <button type="button" onClick={open} className="bg-black-ops text-rose rounded-[40px] py-3 px-6 w-[193px] block">
+        <button type="button" onClick={open} className="bg-black-ops text-rose rounded-[40px] py-3 px-6 w-[193px] block hover:cursor-custom-cursor hover:border-rose transition-all duration-300 ease-in-out">
           Chose File
         </button>
       </div>
       <div className="mt-4">
         {acceptedFiles.length > 0 ? (
           <div>
-            <h4>File Selected:</h4>
+            <h4 className='text-white text-center'>File Selected:</h4>
             <ul>
               {acceptedFiles.map((file) => (
-                <li key={file.name} className='text-white'>
+                <li key={file.name} className='text-white text-center'>
                   {file.name} - {file.size} bytes
                 </li>
               ))}

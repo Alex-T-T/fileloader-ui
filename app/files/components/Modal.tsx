@@ -30,14 +30,14 @@ const Modal: React.FC<ModalProps> = ({ onFileSelect }) => {
   return (
     <form className="flex flex-col bg-home p-6 rounded-xl" onSubmit={handleSubmit}>
       <Dropzone onFileSelect={handleFileSelect} />
-      <label className="mb-3">Title</label>
+      <label className="mb-3 text-white">Title</label>
       <input
         className="mb-6 p-3 rounded-xl border bg-transparent text-white focus:outline-none focus:border-rose"
         placeholder="Enter title of your file"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
       />
-      <label className="mb-3">Description</label>
+      <label className="mb-3 text-white">Description</label>
       <input
         className="mb-6 p-3 rounded-xl border bg-transparent text-white focus:outline-none focus:border-rose"
         placeholder="Enter description"

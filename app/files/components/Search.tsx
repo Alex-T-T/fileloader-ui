@@ -8,6 +8,10 @@ type SearchProps = {
     onSearch: (query: string) => void;
 };
 
+type Suggestion = {
+    name: string;
+};
+
 export default function Search({ onSearch }: SearchProps) {
 
     const [query, setQuery] = useState('');
@@ -21,7 +25,7 @@ export default function Search({ onSearch }: SearchProps) {
     //     onSearch(query);
     // };
 
-    const [suggestions, setSuggestions] = useState<string[]>([]);
+    const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
 
     const handleSuggestionsFetchRequested = ({ value }: SuggestionsFetchRequestedParams) => {
         suggestionApi.getSuggestions(value)
@@ -42,11 +46,11 @@ export default function Search({ onSearch }: SearchProps) {
         onSearch(query);
     };
 
-    const getSuggestionValue = (suggestion: string) => suggestion;
+    const getSuggestionValue = (suggestion: Suggestion ) => suggestion.name;
 
-    const renderSuggestion = (suggestion: string) => (
-        <div>
-            {suggestion}
+    const renderSuggestion = (suggestion: Suggestion, { isHighlighted }: { isHighlighted: boolean }) => (
+        <div className={`p-2 cursor-pointer text-white ${isHighlighted ? 'bg-rose' : ''}`}>
+            {suggestion.name}
         </div>
     );
 
@@ -54,26 +58,27 @@ export default function Search({ onSearch }: SearchProps) {
     return (
         <section className="mb-8 w-full">
             <form onSubmit={handleSubmit} className="w-full rounded-[40px] flex flex-row flex-grow-0 items-center  gap-3 p-3 backdrop-blur-[10px] bg-secondary">
-                {/* <input
-                    placeholder="Search for..."
-                    onChange={handleInputChange}
-                    className="bg-home p-3 rounded-[29px] placeholder-white placeholder:text-sm w-full text-white focus:outline-none focus:border focus:border-rose text-sm"
-            
-               /> */}
-
+    
 
 <Autosuggest
                     suggestions={suggestions}
                     onSuggestionsFetchRequested={handleSuggestionsFetchRequested}
                     onSuggestionsClearRequested={handleSuggestionsClearRequested}
                     getSuggestionValue={getSuggestionValue}
-                    renderSuggestion={renderSuggestion}
                     containerProps={{className: 'w-full'}}
+                    renderSuggestion={renderSuggestion}
                     inputProps={{
                         placeholder: "Search for...",
                         value: query,
                         onChange: handleInputChange,
                         className: "bg-home p-3 rounded-[29px] placeholder-white placeholder:text-sm w-full text-white focus:outline-none focus:border focus:border-rose text-sm",
+                    }}
+                    theme={{
+                        container: 'relative',
+                        suggestionsContainer: 'absolute z-10 bg-secondary rounded-lg mt-1 w-full',
+                        suggestionsList: 'list-none p-0 m-0',
+                        suggestion: 'p-2 cursor-pointer',
+                        suggestionHighlighted: 'p-2 cursor-pointer bg-rose'
                     }}
                 />
                 <button
