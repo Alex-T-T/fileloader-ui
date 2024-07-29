@@ -77,16 +77,13 @@ export default function Files() {
 
       worker.onmessage = (event) => {
         const { success, result, error } = event.data;
+        toast.dismiss();
         if (success) {
-          toast.dismiss();
-          toast.success(`File ${result.name} successfully uploaded`);
-          setIsOpenModal(false);
-          handleCancel();
           setCurrentPage(1);
           fetchFiles()
+          toast.success(`File ${result.name} successfully uploaded`);
         } else {
-          toast.dismiss();
-          toast.error(`Error: ${error}`);
+          error ? toast.error(`Error: ${error}`) : toast.error(`${result.message}`);
         }
         setIsLoading(false);
       };
