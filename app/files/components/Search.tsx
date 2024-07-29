@@ -1,8 +1,9 @@
 
 'use client'
 import { suggestionApi } from "@/app/helpers/api/suggestionsApi";
-import {  useState } from "react";
+import {  useCallback, useState } from "react";
 import Autosuggest, {ChangeEvent, SuggestionsFetchRequestedParams } from 'react-autosuggest';
+import debounce from 'lodash/debounce';
 
 type SearchProps = {
     onSearch: (query: string) => void;
@@ -16,30 +17,30 @@ export default function Search({ onSearch }: SearchProps) {
 
     const [query, setQuery] = useState('');
 
-    // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    //     setQuery(event.target.value);
-    // };
-
-    // const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    //     event.preventDefault();
-    //     onSearch(query);
-    // };
-
     const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
 
+    const debouncedFetchSuggestions = useCallback(
+        debounce((value: string) => {
+            suggestionApi.getSuggestions(value)
+                .then(data => setSuggestions(data.slice(0, 5)))
+                .catch(error => console.error(error));
+        }, 300),
+        []
+    );
+
     const handleSuggestionsFetchRequested = ({ value }: SuggestionsFetchRequestedParams) => {
-        suggestionApi.getSuggestions(value)
-            .then(data => setSuggestions(data))
-            .catch(error => console.error(error));
+        debouncedFetchSuggestions(value);
     };
+    
 
     const handleSuggestionsClearRequested = () => {
         setSuggestions([]);
     };
 
-    const handleInputChange = (event: React.FormEvent<HTMLElement>, { newValue }: ChangeEvent) => {
+    const handleInputChange =  (event: React.FormEvent<HTMLElement>, { newValue }: ChangeEvent) => {
         setQuery(newValue);
-    };
+        debouncedFetchSuggestions(newValue); 
+    }
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -49,14 +50,14 @@ export default function Search({ onSearch }: SearchProps) {
     const getSuggestionValue = (suggestion: Suggestion ) => suggestion.name;
 
     const renderSuggestion = (suggestion: Suggestion, { isHighlighted }: { isHighlighted: boolean }) => (
-        <div className={`p-2 cursor-pointer text-white ${isHighlighted ? 'bg-rose' : ''}`}>
+        <div className={`p-2 cursor-custom-cursor  z-50 text-white ${isHighlighted ? 'bg-rose' : ''}`}>
             {suggestion.name}
         </div>
     );
 
 
     return (
-        <section className="mb-8 w-full">
+        <section className="mb-8 w-full relative">
             <form onSubmit={handleSubmit} className="w-full rounded-[40px] flex flex-row flex-grow-0 items-center  gap-3 p-3 backdrop-blur-[10px] bg-secondary">
     
 
@@ -65,20 +66,21 @@ export default function Search({ onSearch }: SearchProps) {
                     onSuggestionsFetchRequested={handleSuggestionsFetchRequested}
                     onSuggestionsClearRequested={handleSuggestionsClearRequested}
                     getSuggestionValue={getSuggestionValue}
-                    containerProps={{className: 'w-full'}}
+                    containerProps={{className: 'w-full z-50' }}
                     renderSuggestion={renderSuggestion}
                     inputProps={{
                         placeholder: "Search for...",
                         value: query,
                         onChange: handleInputChange,
-                        className: "bg-home p-3 rounded-[29px] placeholder-white placeholder:text-sm w-full text-white focus:outline-none focus:border focus:border-rose text-sm",
+                        className: "bg-home z-50 p-3 rounded-[29px] placeholder-white placeholder:text-sm w-full text-white focus:outline-none focus:border focus:border-rose text-sm",
                     }}
                     theme={{
-                        container: 'relative',
-                        suggestionsContainer: 'absolute z-10 bg-secondary rounded-lg mt-1 w-full',
-                        suggestionsList: 'list-none p-0 m-0',
-                        suggestion: 'p-2 cursor-pointer',
-                        suggestionHighlighted: 'p-2 cursor-pointer bg-rose'
+                        container: 'relative z-50 ',
+                        suggestionsContainer: ' absolute z-50 bg-secondary rounded-lg mt-1 ',
+                        suggestionsList: 'list-none z-50 p-0 m-0 cursor-custom-cursor bg-secondary',
+                        suggestion: 'p-2 z-50 cursor-custom-cursor',
+                        suggestionHighlighted: 'p-2 cursor-custom-cursor bg-rose z-50',
+                        containerOpen: 'z-50'
                     }}
                 />
                 <button

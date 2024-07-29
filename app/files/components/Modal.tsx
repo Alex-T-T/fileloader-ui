@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Dropzone } from './DropZone';
+import toast from 'react-hot-toast';
 
 interface ModalProps {
   onFileSelect: (file: File, title: string, description: string) => void;
@@ -9,6 +10,8 @@ const Modal: React.FC<ModalProps> = ({ onFileSelect }) => {
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+
+
 
   useEffect(() => {
     if (file) {

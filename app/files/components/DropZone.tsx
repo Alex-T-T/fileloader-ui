@@ -12,16 +12,6 @@ export const Dropzone: React.FC<DropzoneProps> = ({ onFileSelect }) => {
     const onDrop = useCallback(
         (acceptedFiles: File[]) => {
           if (acceptedFiles.length > 0) {
-            console.log('acceptedFiles: ', acceptedFiles);
-
-            const MIN_FILE_SIZE = 1 * 1024;
-            const MAX_FILE_SIZE = 7 * 1024 * 1024 * 1024;
-
-            if (acceptedFiles[0].size < MIN_FILE_SIZE || acceptedFiles[0].size > MAX_FILE_SIZE) {
-              console.error('Error: File size must be between 1 KB and 7 GB.');
-              alert('Error: File size must be between 1 KB and 7 GB.');
-              return;
-          }
             onFileSelect(acceptedFiles[0]);
           }
         },

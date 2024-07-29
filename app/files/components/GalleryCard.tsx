@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Text } from '../../components/Text';
 import Image from 'next/image';
 import { filesApi } from '@/app/helpers/api/filesAPI';
+import toast from 'react-hot-toast';
 
 export default function GalleryCard({ data }: { data: IFile }) {
     const [isHovered, setIsHovered] = useState(false);
@@ -14,7 +15,7 @@ export default function GalleryCard({ data }: { data: IFile }) {
 
 
 const handleOpenFile = async (id: number) => {
-
+toast.loading('Download in progress...')
     try {
         const { arrayBuffer, contentType, filename } = await filesApi.downloadFile(id);
         const blob = new Blob([arrayBuffer], { type: contentType });
@@ -26,6 +27,7 @@ const handleOpenFile = async (id: number) => {
         a.click();
         a.remove();
         window.URL.revokeObjectURL(url);
+        toast.dismiss()
     } catch (error) {
         console.error('There was a problem with the fetch operation:', error);
     }

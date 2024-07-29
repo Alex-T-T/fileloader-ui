@@ -9,7 +9,7 @@ export const suggestionApi = {
     getSuggestions: async (
         query: string
     ) => {
-        const url = `${BASE_URL}api/v1/${HttpRoutesEnums.SUGGESTIONS}?${query}`;
+        const url = `${BASE_URL}api/v1/${HttpRoutesEnums.SUGGESTIONS}?search=${query}`;
         const options: RequestInit = {
             method: 'GET',
             next: { revalidate: 0 },
