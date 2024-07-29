@@ -12,16 +12,6 @@ export const Dropzone: React.FC<DropzoneProps> = ({ onFileSelect }) => {
     const onDrop = useCallback(
         (acceptedFiles: File[]) => {
           if (acceptedFiles.length > 0) {
-            console.log('acceptedFiles: ', acceptedFiles);
-
-            const MIN_FILE_SIZE = 1 * 1024;
-            const MAX_FILE_SIZE = 7 * 1024 * 1024 * 1024;
-
-            if (acceptedFiles[0].size < MIN_FILE_SIZE || acceptedFiles[0].size > MAX_FILE_SIZE) {
-              console.error('Error: File size must be between 1 KB and 7 GB.');
-              alert('Error: File size must be between 1 KB and 7 GB.');
-              return;
-          }
             onFileSelect(acceptedFiles[0]);
           }
         },
@@ -47,17 +37,17 @@ export const Dropzone: React.FC<DropzoneProps> = ({ onFileSelect }) => {
 
         <input {...getInputProps()} />
         <p className='text-center text-white mb-3'>Drag & drop or select file from your computer</p>
-        <button type="button" onClick={open} className="bg-black-ops text-rose rounded-[40px] py-3 px-6 w-[193px] block">
+        <button type="button" onClick={open} className="bg-black-ops text-rose rounded-[40px] py-3 px-6 w-[193px] block hover:cursor-custom-cursor hover:border-rose transition-all duration-300 ease-in-out">
           Chose File
         </button>
       </div>
       <div className="mt-4">
         {acceptedFiles.length > 0 ? (
           <div>
-            <h4>File Selected:</h4>
+            <h4 className='text-white text-center'>File Selected:</h4>
             <ul>
               {acceptedFiles.map((file) => (
-                <li key={file.name} className='text-white'>
+                <li key={file.name} className='text-white text-center'>
                   {file.name} - {file.size} bytes
                 </li>
               ))}

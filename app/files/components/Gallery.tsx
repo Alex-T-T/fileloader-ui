@@ -24,7 +24,7 @@ export default function Gallery({data, total, isLoading, onPageChange , currentP
     return (
         <section className="w-full bg-secondary p-6 rounded-[32px]">
             {!isLoading &&
-               <div className='grid grid-cols-4 gap-3'> {data.map((el) => <GalleryCard key={el.id} data={el}/>)}</div> }
+               <div className='grid grid-cols-4 gap-3 z-10'> {data.map((el) => <GalleryCard key={el.id} data={el}/>)}</div> }
             {isLoading && (
                 <div className="absolute z-10 top-[30%] left-[50%] translate-x-[-50%]">
                     <RotatingLines

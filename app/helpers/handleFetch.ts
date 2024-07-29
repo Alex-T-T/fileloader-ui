@@ -1,9 +1,9 @@
 export const handleFetch = async (url: string, options: RequestInit, isBinary: boolean = false) => {
-    try {
         const res = await fetch(url, options);
 
         if (!res.ok) {
-            throw new Error(res.status.toString(), { cause: res });
+            const response = await res.json()
+            throw new Error(response.message);
         }
 
         if (res.status === 204) {
@@ -16,15 +16,8 @@ export const handleFetch = async (url: string, options: RequestInit, isBinary: b
             const contentDisposition = res.headers.get('Content-Disposition');
             const filename = contentDisposition ? contentDisposition.split('filename=')[1].replace(/"/g, '') : 'downloaded_file';
         
-     
-
-     
             return { arrayBuffer, contentType, filename };
         } else {
             return await res.json();
         }
-    } catch (error) {
-        console.error(error);
-        throw new Error('Error with API request');
-    }
 };
