@@ -2,7 +2,6 @@ import { HttpRoutesEnums } from '../emuns/appEnums';
 import { handleFetch } from '../handleFetch';
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
-console.log('BASE_URL: ', BASE_URL);
 
 type getAllFilesProps = {
     limit?: number | undefined,

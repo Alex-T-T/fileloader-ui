@@ -9,6 +9,7 @@ import Search from './components/Search';
 import TitleBlock from './components/TitleBlock';
 import Dialog from '../components/Dialog';
 import Modal from './components/Modal';
+import { Title } from '../components/Title';
 
 export default function Files() {
   const [files, setFiles] = useState<IFile[]>([]);
@@ -85,7 +86,7 @@ export default function Files() {
       <div className="flex-1 w-full min-w-0">
         <Search onSearch={handleSearch} />
         <TitleBlock />
-        <Gallery data={files} total={totalCount} currentPage={currentPage} isLoading={isLoading} onPageChange={setCurrentPage} />
+      {totalCount > 0  ? <Gallery data={files} total={totalCount} currentPage={currentPage} isLoading={isLoading} onPageChange={setCurrentPage} /> : <Title isMainTitle className='text-white text-center'>There are no files yet. Start with + button.</Title>}
       </div>
       {isOpenModal && (
         <Dialog
